@@ -15,10 +15,7 @@
   "author": "Amit Gangrade - amitgangrade04@gmail.com",
 
   "background": {
-    "scripts": [
-      "js/constants.js",
-      "js/chrome/background.js"
-    ],
+    "page": "background.html",
     "persistent": false
   },
 
@@ -30,7 +27,7 @@
     "default_popup": "popup.html"
   },
 
-  "permissions": ["cookies", "tabs", "*://*.asana.com/"],
+  "permissions": ["alarms", "cookies", "notifications", "storage", "tabs", "*://*.asana.com/"],
 
   "commands": {
     "_execute_browser_action": {

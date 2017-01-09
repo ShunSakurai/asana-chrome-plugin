@@ -19,3 +19,7 @@ chrome.cookies.onChanged.addListener(function (changeInfo) {
 chrome.commands.onCommand.addListener(function (command) {
     chrome.browserAction.enable();
 });
+
+chrome.alarms.create('everyOneMinute', {when: Date.now() + 1000, periodInMinutes: 1});
+
+angular.bootstrap(document, ['asanaBackground']);

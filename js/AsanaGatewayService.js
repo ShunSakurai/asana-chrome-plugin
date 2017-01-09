@@ -1,4 +1,4 @@
-asanaModule.service("AsanaGateway", ["$http", function ($http) {
+asanaServiceModule.service("AsanaGateway", ["$http", function ($http) {
 
     this.getWorkspaces = function (success, failure, options) {
         options = options? options: {};
@@ -29,6 +29,16 @@ asanaModule.service("AsanaGateway", ["$http", function ($http) {
         options.method = "GET";
         options.path = "workspaces/" + options.workspace_id + "/projects";
         options.query = {opt_fields: "name,archived,notes,public"};
+
+        this.api(success, failure, options);
+    };
+
+    this.getWorkspaceTasks = function (success, failure, options) {
+        if(typeof options === 'undefined' || typeof options.workspace_id === 'undefined')
+            failure({"error": "Missing Parameter", message: "Fix this"});
+        options.method = "GET";
+        options.path = "workspaces/" + options.workspace_id + "/tasks";
+        options.query = {assignee: "me", opt_fields: "name,due_on,due_at", completed_since: 'now'};
 
         this.api(success, failure, options);
     };

@@ -1,4 +1,6 @@
-var asanaModule = angular.module("asana", ["ngRoute", "ngSanitize", "ui.select", 'ui.bootstrap', 'ui.bootstrap.datetimepicker']);
+var asanaServiceModule = angular.module("asanaService", []);
+
+var asanaModule = angular.module("asana", ["ngRoute", "ngSanitize", "ui.select", 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'asanaService']);
 
 // configure our routes
 asanaModule.config(function($routeProvider, $locationProvider) {
@@ -20,6 +22,10 @@ asanaModule.config(function($routeProvider, $locationProvider) {
         .when('/tasks/:id', {
             templateUrl: 'pages/task.html',
             controller: 'taskController'
+        })
+        .when('/utility', {
+            templateUrl : 'pages/utility.html',
+            controller  : 'utilityController'
         });
 });
 
@@ -30,3 +36,18 @@ asanaModule.config([
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|chrome-extension):/);
     }
 ]);
+
+var asanaBackgroundModule = angular.module("asanaBackground", ['asanaService']);
+
+asanaBackgroundModule.run(['AsanaAlarmService', 'AsanaGateway', function(AsanaAlarmService, AsanaGateway){
+    AsanaGateway.getWorkspaces(function (response) {
+        var userWorkspaces = response;
+        chrome.alarms.onAlarm.addListener(function(everyOneMinute){
+            chrome.storage.sync.get(null, function (value) {
+                if(value.alarmEnabled || typeof value.alarmEnabled === 'undefined') {
+                    AsanaAlarmService.checkTasksAndNotify(userWorkspaces);
+                }
+            });
+        });
+    });
+}]);

@@ -25,6 +25,10 @@ body{
     float: left;
 }
 
+table{
+    width: 100%;
+}
+
 /* profile image */
 img.profile-img{
     height: auto;

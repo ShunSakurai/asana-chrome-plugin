@@ -34,6 +34,9 @@ of REST API. Onus is on us to develop something great out of it.
     - view tasks assigned to another user
     - mark tasks as done
 
+3. Other Utilities
+    - set alarm on my tasks with due time
+
 ## Usage
 1. Install as a User:
 Head to [Chrome Web Store](https://chrome.google.com/webstore/detail/asanang-asana-extension-f/mcfgjehdbegcfjeecdgdpjlmfbeamgdd) and click "+ADD TO CHROME"

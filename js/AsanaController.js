@@ -387,3 +387,26 @@ asanaModule.controller("taskController", function ($scope, $routeParams, AsanaGa
     };
 });
 
+
+asanaModule.controller("utilityController", function($scope, AsanaGateway, AsanaAlarmService) {
+
+    $scope.setAlarmOnLoad = function () {
+        chrome.storage.sync.get(null, function (value) {
+            if(typeof value.alarmEnabled === 'undefined') {
+                $scope.alarmEnabled = true;
+            } else {
+                $scope.alarmEnabled = value.alarmEnabled;
+            }
+            $scope.alarmButton = ($scope.alarmEnabled)? "Alarm On": "Alarm Off";
+        });
+    };
+    $scope.setAlarmOnLoad();
+
+    $scope.toggleAlarm = function () {
+        $scope.alarmEnabled = !$scope.alarmEnabled;
+        $scope.alarmButton = ($scope.alarmEnabled)? "Alarm On": "Alarm Off";
+        chrome.storage.sync.set({alarmEnabled: $scope.alarmEnabled});
+    };
+
+    $scope.checkTasksAndNotify = AsanaAlarmService.checkTasksAndNotify;
+});
