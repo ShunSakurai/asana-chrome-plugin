@@ -27,6 +27,37 @@ body{
 
 table{
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px;
+}
+
+tr.padding-bottom-tr>td{
+    padding-bottom: 10px;
+}
+
+tr.form-tr>td{
+    padding: 5px;
+}
+
+tr.form-tr>td.with-border{
+    border-radius: 4px;
+    border: 1px solid #efefef;
+}
+
+button.float-right{
+    float: right;
+}
+
+input.no-border{
+    border: none;
+}
+
+input.width-240{
+    width: 240px;
+}
+
+input.width-60{
+    width: 60px;
 }
 
 /* profile image */

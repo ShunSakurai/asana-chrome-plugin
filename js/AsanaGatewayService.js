@@ -113,6 +113,16 @@ asanaServiceModule.service("AsanaGateway", ["$http", function ($http) {
         this.api(success, failure, options);
     };
 
+    this.updateTask = function (success, failure, options) {
+        if(typeof options == 'undefined')
+            options = {};
+        if(typeof options.task_id == 'undefined')
+            failure({"error": "Missing Parameter", message: "Fix this"});
+        options.method = "PUT";
+        options.path = "tasks/" + options.task_id;
+        this.api(success, failure, options);
+    };
+
     this.taskDone = function (success, failure, options) {
         if(typeof options == 'undefined')
             options = {};
@@ -156,6 +166,7 @@ asanaServiceModule.service("AsanaGateway", ["$http", function ($http) {
             failure({"error": "Missing Parameter", message: "Fix this"});
         options.method = "PUT";
         options.path = "tasks/" + options.task_id;
+        options.data = options.data;
         this.api(success, failure, options);
     };
 

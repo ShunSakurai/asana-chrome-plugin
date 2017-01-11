@@ -1,8 +1,32 @@
 <form>
     <table>
-        <tr>
-            <td>Tasks assigned to me</td>
-            <td><button type="button" class="btn btn-asana" ng-click="toggleAlarm()">{{alarmButton}}</button></td>
+        <tr class="padding-bottom-tr">
+            <td class="with-border">Tasks assigned to me</td>
+            <td><button type="button" class="btn btn-asana float-right" ng-click="toggleAlarm()">{{alarmButton}}</i></td>
+        </tr>
+        <tr class="padding-bottom-tr">
+            <td><span class="status label" ng-show="taskUpdateStatus.show"
+        ng-class="{'label-success': taskUpdateStatus.success, 'label-danger': !taskUpdateStatus.success}">
+        {{taskUpdateStatus.message}}
+    </span></td>
+            <td><button type="button" class="btn btn-asana float-right" ng-click="replacePatterns()">Replace Note</i></td>
         </tr>
     </table>
+    <table>
+        <tr class="form-tr" ng-repeat="pattern in patternArray">
+            <td class="with-border"><input class="no-border width-240" type="text" ng-model="pattern[0]" ng-change="saveReplacePatterns()"></td>
+            <td class="with-border"><input class="no-border width-60" type="text" ng-model="pattern[1]" ng-change="saveReplacePatterns()"></td>
+            <td><span ng-click="delPattern($index)"><i class="fa fa-minus-circle"></i></span></td>
+        </tr>
+    </table>
+
+    <span ng-click="addPattern()" class="btn"><i class="fa fa-plus-circle"></i> Add row</span>
+    <span ng-click="resetToDefault()" class="btn"><i class="fa fa-refresh"></i> Reset to Default</span>
+    <span ng-click="toggleHelp()" class="btn"><i class="fa fa-question"></i> Help</span>
+    <div class="font-size-10" ng-show="showHelp">
+        You can replace text in Asana task's description (notes) field. Strings matched with the string or the <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions">regular expressions</a>* in the left column in the above table will be replaced with the string or regular expressions capture group (e.g. $1) in the right column.<br>
+        Asana NG passes the string in the left column to <a href=https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp>'new RegExp()' constructor</a>* with 'gm' flag. By the 'g' flag, it searches for all instances of the pattern, and by 'm', it recognize the start and the end of each line as '^' and '$'. Please note that it's a case sensitive operation.<br>
+        Asana NG gets the task ID from the URL of the page. Please make sure that the task page (not the task page opened from Inbox) is opened.<br><br>
+        *Due to the security limitations of Chrome, please copy and paste the links to browser window to read them.
+    </div>
 </form>

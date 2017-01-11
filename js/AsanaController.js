@@ -388,7 +388,7 @@ asanaModule.controller("taskController", function ($scope, $routeParams, AsanaGa
 });
 
 
-asanaModule.controller("utilityController", function($scope, AsanaGateway, AsanaAlarmService) {
+asanaModule.controller("utilityController", function($scope, AsanaGateway, AsanaAlarmService, $timeout, $window) {
 
     $scope.setAlarmOnLoad = function () {
         chrome.storage.sync.get(null, function (value) {
@@ -400,6 +400,7 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
             $scope.alarmButton = ($scope.alarmEnabled)? "Alarm On": "Alarm Off";
         });
     };
+
     $scope.setAlarmOnLoad();
 
     $scope.toggleAlarm = function () {
@@ -409,4 +410,96 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
     };
 
     $scope.checkTasksAndNotify = AsanaAlarmService.checkTasksAndNotify;
+
+    $scope.replacePatterns = function () {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabArray) {
+            var urlArray = tabArray[0].url.replace('/f', '').split('/');
+            var taskId = urlArray[urlArray.length - 1];
+            AsanaGateway.getTask(function (response) {
+                var updatedNote = response.notes;
+                for (var i = 0; i < $scope.patternArray.length; i ++) {
+                    //https://bugs.chromium.org/p/chromium/issues/detail?id=380964
+                    var pattern = new RegExp($scope.patternArray[i][0], 'gm');
+                    updatedNote = updatedNote.replace(pattern, $scope.patternArray[i][1]);
+                }
+                AsanaGateway.updateTask(
+                    function (response) {
+                        console.log('Updated task details: ' + JSON.stringify(response));
+                        $scope.taskUpdateStatus = {
+                            success: true,
+                            message: "Task updated",
+                            show: true,
+                        };
+                        $scope.hideUpdateStatusAfterFive();
+                    }, function (response) {
+                        console.log('Error updating task details: ' + JSON.stringify(response));
+                        $scope.taskUpdateStatus = {
+                            success: false,
+                            message: "Error updating the task. Please try again",
+                            show: true,
+                        };
+                        $scope.hideUpdateStatusAfterFive();
+                    }, {
+                        task_id: response.id,
+                        data: {notes: updatedNote}
+                    });
+            }, function (response) {
+                console.log('Error fetching task details: ' + JSON.stringify(response));
+                $scope.taskUpdateStatus = {
+                    success: false,
+                    message: "Failed. Ensure that an Asana task page is open",
+                    show: true,
+                };
+                $scope.hideUpdateStatusAfterFive();
+            }, {task_id: taskId});
+        });
+    };
+
+    $scope.hideUpdateStatusAfterFive = function () {
+        $timeout(function () {
+            $scope.taskUpdateStatus.show = false;
+        }, 5000);
+    };
+
+    $scope.defaultPatternArray = [
+        ['[<"]?([A-Za-z0-9\\-:;/._=+&%?!#@]+)[>"]?\\s[<\\[](mailto:|http://|https://)?\\1[/\\s]*[>\\]]', '$1'],
+        ['&[rl]dquo;', '\\"'],
+        ['&[rl]squo;', "\\'"],
+        ['&dash;', '-'],
+    ];
+
+    $scope.setReplaceOnLoad = function () {
+        chrome.storage.sync.get(null, function (value) {
+            $scope.patternArray = value.replacePatterns || $scope.defaultPatternArray;
+        });
+    };
+
+    $scope.setReplaceOnLoad();
+
+    $scope.saveReplacePatterns = function () {
+        chrome.storage.sync.set({replacePatterns: $scope.patternArray});
+    };
+
+    $scope.$on("$destroy", function() {
+        $scope.saveReplacePatterns();
+    });
+
+    $scope.resetToDefault = function () {
+        chrome.storage.sync.remove('replacePatterns', function () {
+            $scope.setReplaceOnLoad();
+        });
+    };
+
+    $scope.addPattern = function(){
+        $scope.patternArray.push(['', '']);
+    };
+    $scope.delPattern = function(idx){
+        $scope.patternArray.splice(idx, 1);
+    };
+
+    $scope.showHelp = false;
+
+    $scope.toggleHelp = function () {
+        $scope.showHelp = !$scope.showHelp;
+    };
 });
