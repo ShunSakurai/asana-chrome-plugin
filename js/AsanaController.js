@@ -411,48 +411,50 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
 
     $scope.checkTasksAndNotify = AsanaAlarmService.checkTasksAndNotify;
 
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabArray) {
+        var pageUrl = tabArray[0].url;
+        var asanaUrlMatch = /app.asana.com\/0\/\d+\/(\d+)/.exec(pageUrl);
+        $scope.taskId = asanaUrlMatch? asanaUrlMatch[1]: null;
+    });
+
     $scope.replacePatterns = function () {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabArray) {
-            var urlArray = tabArray[0].url.replace('/f', '').split('/');
-            var taskId = urlArray[urlArray.length - 1];
-            AsanaGateway.getTask(function (response) {
-                var updatedNote = response.notes;
-                for (var i = 0; i < $scope.patternArray.length; i ++) {
-                    //https://bugs.chromium.org/p/chromium/issues/detail?id=380964
-                    var pattern = new RegExp($scope.patternArray[i][0], 'gm');
-                    updatedNote = updatedNote.replace(pattern, $scope.patternArray[i][1]);
-                }
-                AsanaGateway.updateTask(
-                    function (response) {
-                        console.log('Updated task details: ' + JSON.stringify(response));
-                        $scope.taskUpdateStatus = {
-                            success: true,
-                            message: "Task updated",
-                            show: true,
-                        };
-                        $scope.hideUpdateStatusAfterFive();
-                    }, function (response) {
-                        console.log('Error updating task details: ' + JSON.stringify(response));
-                        $scope.taskUpdateStatus = {
-                            success: false,
-                            message: "Error updating the task. Please try again",
-                            show: true,
-                        };
-                        $scope.hideUpdateStatusAfterFive();
-                    }, {
-                        task_id: response.id,
-                        data: {notes: updatedNote}
-                    });
-            }, function (response) {
-                console.log('Error fetching task details: ' + JSON.stringify(response));
-                $scope.taskUpdateStatus = {
-                    success: false,
-                    message: "Failed. Ensure that an Asana task page is open",
-                    show: true,
-                };
-                $scope.hideUpdateStatusAfterFive();
-            }, {task_id: taskId});
-        });
+        AsanaGateway.getTask(function (response) {
+            var updatedNote = response.notes;
+            for (var i = 0; i < $scope.patternArray.length; i ++) {
+                //https://bugs.chromium.org/p/chromium/issues/detail?id=380964
+                var pattern = new RegExp($scope.patternArray[i][0], 'gm');
+                updatedNote = updatedNote.replace(pattern, $scope.patternArray[i][1]);
+            }
+            AsanaGateway.updateTask(
+                function (response) {
+                    console.log('Updated task details: ' + JSON.stringify(response));
+                    $scope.taskUpdateStatus = {
+                        success: true,
+                        message: "Task updated",
+                        show: true,
+                    };
+                    $scope.hideUpdateStatusAfterFive();
+                }, function (response) {
+                    console.log('Error updating task details: ' + JSON.stringify(response));
+                    $scope.taskUpdateStatus = {
+                        success: false,
+                        message: "Error updating the task. Please try again",
+                        show: true,
+                    };
+                    $scope.hideUpdateStatusAfterFive();
+                }, {
+                    task_id: response.id,
+                    data: {notes: updatedNote}
+                });
+        }, function (response) {
+            console.log('Error fetching task details: ' + JSON.stringify(response));
+            $scope.taskUpdateStatus = {
+                success: false,
+                message: "Failed. Ensure that an Asana task page is open",
+                show: true,
+            };
+            $scope.hideUpdateStatusAfterFive();
+        }, {task_id: $scope.taskId});
     };
 
     $scope.hideUpdateStatusAfterFive = function () {

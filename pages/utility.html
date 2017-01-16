@@ -9,7 +9,7 @@
         ng-class="{'label-success': taskUpdateStatus.success, 'label-danger': !taskUpdateStatus.success}">
         {{taskUpdateStatus.message}}
     </span></td>
-            <td><button type="button" class="btn btn-asana float-right" ng-click="replacePatterns()">Replace Note</i></td>
+            <td><button type="button" class="btn btn-asana float-right" ng-click="replacePatterns()" ng-disabled='!taskId'>Replace Note</i></td>
         </tr>
     </table>
     <table>
