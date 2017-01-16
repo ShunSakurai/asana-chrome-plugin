@@ -3,8 +3,8 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
     this.createNotification = function (message, taskId, title) {
         // only message is the required argument
         messageString = message.toString() || 'null';
-        notifcationIdString = taskId? (taskId.toString() || message): '';
-        titleString = title? (title.toString() || 'This is'): 'This is';
+        notifcationIdString = (typeof(taskId) === 'number')? taskId.toString(): messageString;
+        titleString = title? title.toString(): 'AsanaNG';
         chrome.notifications.create(
             notifcationIdString, {type: "basic", iconUrl: "img/icon128.png", title: titleString, message: messageString}
         );
@@ -34,7 +34,7 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
                     var arrayDueAt = response[i].due_at.split('T');
                     var arrayDueTime = arrayDueAt[1].replace('Z', '').split(':');
                     var minuteRemaining = (Number(arrayDueTime[0]) - dateNow.getUTCHours()) * 60 + (Number(arrayDueTime[1]) - dateNow.getUTCMinutes());
-                    if (minuteRemaining === 1 || minuteRemaining === 5 || minuteRemaining === 15 || minuteRemaining === 60) {
+                    if ([1, 5, 15, 60].indexOf(minuteRemaining) !== -1) {
                         this.createNotification(response[i].name, response[i].id, minuteRemaining.toString() + " min until");
                     }
                 }
@@ -43,12 +43,11 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
     };
 
     this.failureFunc = function (response) {
-        this.createNotification("Error: " + JSON.stringify(response));
+        this.createNotification("Error: " + JSON.stringify(response), 0);
     };
 
     this.checkTasksAndNotify = function (workspaces) {
         // Somehow the Chrome alarm fires 2-3 times a minute
-
         var dateNow = new Date();
         var reportingMin = dateNow.getUTCMinutes();
         if (reportingMin === this.reportedMin) {
