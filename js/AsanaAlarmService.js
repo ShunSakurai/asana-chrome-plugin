@@ -34,7 +34,7 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
                     var arrayDueAt = response[i].due_at.split('T');
                     var arrayDueTime = arrayDueAt[1].replace('Z', '').split(':');
                     var minuteRemaining = (Number(arrayDueTime[0]) - dateNow.getUTCHours()) * 60 + (Number(arrayDueTime[1]) - dateNow.getUTCMinutes());
-                    if ([1, 5, 15, 60].indexOf(minuteRemaining) !== -1) {
+                    if ([1, 5, 15, 30, 60].indexOf(minuteRemaining) !== -1) {
                         this.createNotification(response[i].name, response[i].id, minuteRemaining.toString() + " min until");
                     }
                 }

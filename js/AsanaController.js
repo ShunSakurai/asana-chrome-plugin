@@ -465,9 +465,9 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
 
     $scope.defaultPatternArray = [
         ['[<"]?([A-Za-z0-9\\-:;/._=+&%?!#@]+)[>"]?\\s[<\\[](mailto:|http://|https://)?\\1[/\\s]*[>\\]]', '$1'],
-        ['&[rl]dquo;', '\\"'],
-        ['&[rl]squo;', "\\'"],
-        ['&dash;', '-'],
+        ['&[rl]d?quo;', '\"'],
+        ['&([rl]squo|apos);', "\'"],
+        ['&[mn]?dash;', " - "]
     ];
 
     $scope.setReplaceOnLoad = function () {
