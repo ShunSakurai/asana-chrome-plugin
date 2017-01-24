@@ -1,10 +1,10 @@
 <form>
-    <table>
-        <tr class="padding-bottom-tr">
-            <td class="with-border">Tasks assigned to me</td>
+    <table class="padding-bottom">
+        <tr>
+            <td>Tasks assigned to me</td>
             <td><button type="button" class="btn btn-asana float-right" ng-click="toggleAlarm()">{{alarmButton}}</i></td>
         </tr>
-        <tr class="padding-bottom-tr">
+        <tr>
             <td><span class="status label" ng-show="taskUpdateStatus.show"
         ng-class="{'label-success': taskUpdateStatus.success, 'label-danger': !taskUpdateStatus.success}">
         {{taskUpdateStatus.message}}
@@ -12,10 +12,10 @@
             <td><button type="button" class="btn btn-asana float-right" ng-click="replacePatterns()" ng-disabled='!taskId'>Replace Note</i></td>
         </tr>
     </table>
-    <table>
+    <table class="separate">
         <tr class="form-tr" ng-repeat="pattern in patternArray">
-            <td class="with-border"><input class="no-border width-240" type="text" ng-model="pattern[0]" ng-change="saveReplacePatterns()"></td>
-            <td class="with-border"><input class="no-border width-60" type="text" ng-model="pattern[1]" ng-change="saveReplacePatterns()"></td>
+            <td class="with-border"><input class="no-border width-200" type="text" ng-model="pattern[0]" ng-trim="false" ng-change="saveReplacePatterns()"></td>
+            <td class="with-border"><textarea class="no-border width-100" type="text" ng-model="pattern[1]" ng-trim="false" ng-change="saveReplacePatterns()"></textarea></td>
             <td><span ng-click="delPattern($index)"><i class="fa fa-minus-circle"></i></span></td>
         </tr>
     </table>
@@ -27,9 +27,14 @@
         <p><strong>Alarm</strong></p>
         <p>AsanaNG notifies when you have tasks that are assigned to you, incomplete, and with due time either 1, 5, 15, 30, or 60 minutes from now.</p>
         <p><strong>Replace Note</strong></p>
-        <p>You can replace text in Asana task's description (notes) field. Strings matched with the string or the <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions">regular expressions</a>* in the left column in the above table will be replaced with the string or regular expressions capture group (e.g. $1) in the right column.<br>
-        Asana NG passes the string in the left column to <a href=https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp>'new RegExp()' constructor</a>* with 'gm' flag. By the 'g' flag, it searches for all instances of the pattern, and by 'm', it recognize the start and the end of each line as '^' and '$'. Please note that it's a case sensitive operation.<br>
-        Asana NG gets the task ID from the URL of the page. Please make sure that the task page (not the task page opened from Inbox) is opened.<br><br>
-        *Due to the security limitations of Chrome, please copy and paste the links to browser window to read them.</p>
+        <p>You can replace text in Asana task's description (notes) field, like you do in text editors. Strings matched with the string or the JavaScript <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions">regular expressions</a>* in the left column in the above table will be replaced with the string or regular expressions capture group (e.g. $1) in the right column.<br><br>
+        <em>Left column</em><br>
+        Asana NG passes the string in the left column to <a href=https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp>'new RegExp()' constructor</a>* with 'gm' flag. By the 'g' flag, it searches for all instances of the pattern, and by 'm', it recognize the start and the end of each line as '^' and '$'. Please note that it's a case sensitive operation.<br><br>
+        <em>Right column</em><br>
+        Multi-line text is supported.<br><br>
+        <em>Note</em><br>
+        Asana NG gets the task ID from the URL of the page. Please make sure that the task page (not the task page opened from Inbox) is opened.<br>
+        The limitations of JavaScript regular expressions apply. For example, you cannot use '(?<=)' pattern.<br><br>
+        * Due to the security limitations of Chrome, please copy and paste the links to browser window to read them.</p>
     </div>
 </form>

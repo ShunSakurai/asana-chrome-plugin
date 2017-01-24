@@ -27,12 +27,15 @@ body{
 
 table{
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 1px;
 }
 
-tr.padding-bottom-tr>td{
+table.padding-bottom td{
     padding-bottom: 10px;
+}
+
+table.separate{
+    border-collapse: separate;
+    border-spacing: 1px;
 }
 
 tr.form-tr>td{
@@ -52,12 +55,22 @@ input.no-border{
     border: none;
 }
 
-input.width-240{
-    width: 240px;
+input.width-200{
+    width: 200px;
 }
 
-input.width-60{
-    width: 60px;
+tr.form-tr>td>textarea {
+    white-space: pre-wrap;
+    resize: none;
+    height: 24px;
+}
+
+textarea.no-border{
+    border: none;
+}
+
+textarea.width-100{
+    width: 100px;
 }
 
 /* profile image */
