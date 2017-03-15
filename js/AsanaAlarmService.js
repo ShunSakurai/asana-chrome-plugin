@@ -43,7 +43,9 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
     };
 
     this.failureFunc = function (response) {
-        this.createNotification("Error: " + JSON.stringify(response), 0);
+        // Sometimes the ticket cookie expires and an error is displayed
+        // I have to come up with a workaround
+        this.createNotification("Alarm Error: " + JSON.stringify(response), 0);
     };
 
     this.checkTasksAndNotify = function (workspaces) {

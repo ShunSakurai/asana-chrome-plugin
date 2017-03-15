@@ -486,6 +486,10 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
         $scope.saveReplacePatterns();
     });
 
+    $scope.clearPatterns = function () {
+        $scope.patternArray = []
+    };
+
     $scope.resetToDefault = function () {
         chrome.storage.sync.remove('replacePatterns', function () {
             $scope.setReplaceOnLoad();

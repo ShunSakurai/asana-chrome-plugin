@@ -20,13 +20,16 @@
         </tr>
     </table>
 
-    <span ng-click="addPattern()" class="btn"><i class="fa fa-plus-circle"></i> Add row</span>
-    <span ng-click="resetToDefault()" class="btn"><i class="fa fa-refresh"></i> Restore default</span>
+    <span ng-click="addPattern()" class="btn"><i class="fa fa-plus-circle"></i> Add</span>
+    <span ng-click="clearPatterns()" class="btn"><i class="fa fa-times"></i> Clear</span>
+    <span ng-click="resetToDefault()" class="btn"><i class="fa fa-refresh"></i> Default</span>
     <span ng-click="toggleHelp()" class="btn"><i class="fa fa-question"></i> Help</span>
     <div class="font-size-10" ng-show="showHelp">
         <p><strong>Alarm</strong></p>
         <p>AsanaNG notifies when you have tasks that are assigned to you, incomplete, and with due time either 1, 5, 15, 30, or 60 minutes from now.</p>
         <p><strong>Replace Note</strong></p>
+        <p>All formatting such as bold, italic, etc. will be removed by using this feature!</p>
+
         <p>You can replace text in Asana task's description (notes) field, like you do in text editors. Strings matched with the string or the JavaScript <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions">regular expressions</a>* in the left column in the above table will be replaced with the string or regular expressions capture group (e.g. $1) in the right column.<br><br>
         <em>Left column</em><br>
         Asana NG passes the string in the left column to <a href=https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp>'new RegExp()' constructor</a>* with 'gm' flag. By the 'g' flag, it searches for all instances of the pattern, and by 'm', it recognize the start and the end of each line as '^' and '$'. Please note that it's a case sensitive operation.<br><br>
