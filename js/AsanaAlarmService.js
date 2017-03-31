@@ -8,16 +8,19 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
         chrome.notifications.create(
             notifcationIdString, {type: "basic", iconUrl: "img/icon128.png", title: titleString, message: messageString}
         );
-        var notificationSound = new Audio();
-        // sound taken from http://gallery.mobile9.com/f/4709233/
-        notificationSound.src = chrome.extension.getURL("sound/Cool Notification0.mp3");
-        notificationSound.play();
         if ((typeof taskId === 'number') && (listenedTasks.indexOf(taskId) === -1)) {
             listenedTasks.push(taskId);
             chrome.notifications.onClicked.addListener(function (taskId){
                 chrome.tabs.create({url: "https://app.asana.com/0/0/" + taskId}, function (tab) {});
             });
         }
+    };
+
+    this.playSound = function () {
+        var notificationSound = new Audio();
+        // sound taken from http://gallery.mobile9.com/f/4709233/
+        notificationSound.src = chrome.extension.getURL("sound/Cool Notification0.mp3");
+        notificationSound.play();
     };
 
     var listenedTasks = [];
@@ -36,6 +39,7 @@ asanaServiceModule.service("AsanaAlarmService", function (AsanaGateway) {
                     var minuteRemaining = (Number(arrayDueTime[0]) - dateNow.getUTCHours()) * 60 + (Number(arrayDueTime[1]) - dateNow.getUTCMinutes());
                     if ([1, 5, 15, 30, 60].indexOf(minuteRemaining) !== -1) {
                         this.createNotification(response[i].name, response[i].id, minuteRemaining.toString() + " min until");
+                        this.playSound();
                     }
                 }
             }

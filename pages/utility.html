@@ -1,21 +1,28 @@
 <form>
-    <table class="padding-bottom">
-        <tr>
-            <td>Tasks assigned to me</td>
-            <td><button type="button" class="btn btn-asana float-right" ng-click="toggleAlarm()">{{alarmButton}}</i></td>
-        </tr>
-        <tr>
-            <td><span class="status label" ng-show="taskUpdateStatus.show"
-        ng-class="{'label-success': taskUpdateStatus.success, 'label-danger': !taskUpdateStatus.success}">
-        {{taskUpdateStatus.message}}
-    </span></td>
-            <td><button type="button" class="btn btn-asana float-right" ng-click="replacePatterns()" ng-disabled='!taskId'>Replace Note</i></td>
-        </tr>
-    </table>
+    <div class="form-group">
+        <h5>Alarm for My Tasks</h5>
+    </div>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-asana" ng-click="toggleAlarm()">{{alarmButton}}</button>
+    </div>
+
+    <div class="form-group">
+        <h5>Text replacement in task note</h5>
+    </div>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-asana" title="Note: All formatting will be lost" ng-click="replacePatterns()" ng-disabled='!taskId'>Replace</button>
+        <span class="status label" ng-show="taskUpdateStatus.show"
+            ng-class="{'label-success': taskUpdateStatus.success, 'label-danger': !taskUpdateStatus.success}">
+            {{taskUpdateStatus.message}}
+        </span>
+    </div>
+
     <table class="separate">
         <tr class="form-tr" ng-repeat="pattern in patternArray">
-            <td class="with-border"><input class="no-border width-200" type="text" ng-model="pattern[0]" ng-trim="false" ng-change="saveReplacePatterns()"></td>
-            <td class="with-border"><textarea class="no-border width-100" type="text" ng-model="pattern[1]" ng-trim="false" ng-change="saveReplacePatterns()"></textarea></td>
+            <td class="with-border"><input class="no-border width-220" type="text" ng-model="pattern[0]" ng-trim="false" ng-change="saveReplacePatterns()"></td>
+            <td class="with-border"><textarea trusted-html class="no-border width-100" type="text" ng-model="pattern[1]" ng-trim="false" ng-change="saveReplacePatterns()"></textarea></td>
             <td><span ng-click="delPattern($index)"><i class="fa fa-minus-circle"></i></span></td>
         </tr>
     </table>

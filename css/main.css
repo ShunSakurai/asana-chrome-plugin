@@ -25,44 +25,33 @@ body{
     float: left;
 }
 
-table{
-    width: 100%;
-}
-
-table.padding-bottom td{
-    padding-bottom: 10px;
-}
-
 table.separate{
     border-collapse: separate;
     border-spacing: 1px;
+    font-size: 10px;
 }
 
 tr.form-tr>td{
-    padding: 5px;
+    padding: 2px;
 }
 
 tr.form-tr>td.with-border{
-    border-radius: 4px;
+    border-radius: 2px;
     border: 1px solid #efefef;
-}
-
-button.float-right{
-    float: right;
 }
 
 input.no-border{
     border: none;
 }
 
-input.width-200{
-    width: 200px;
+input.width-220{
+    width: 220px;
 }
 
 tr.form-tr>td>textarea {
     white-space: pre-wrap;
     resize: none;
-    height: 24px;
+    height: 15px;
 }
 
 textarea.no-border{

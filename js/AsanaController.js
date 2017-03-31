@@ -397,7 +397,7 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
             } else {
                 $scope.alarmEnabled = value.alarmEnabled;
             }
-            $scope.alarmButton = ($scope.alarmEnabled)? "Alarm On": "Alarm Off";
+            $scope.alarmButton = ($scope.alarmEnabled)? "On": "Off";
         });
     };
 
@@ -405,7 +405,7 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
 
     $scope.toggleAlarm = function () {
         $scope.alarmEnabled = !$scope.alarmEnabled;
-        $scope.alarmButton = ($scope.alarmEnabled)? "Alarm On": "Alarm Off";
+        $scope.alarmButton = ($scope.alarmEnabled)? "On": "Off";
         chrome.storage.sync.set({alarmEnabled: $scope.alarmEnabled});
     };
 
@@ -465,9 +465,9 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
 
     $scope.defaultPatternArray = [
         ['[<"]?([A-Za-z0-9\\-:;/._=+&%?!#@]+)[>"]?\\s[<\\[](mailto:|http://|https://)?\\1[/\\s]*[>\\]]', '$1'],
-        ['&[rl]d?quo;', '\"'],
+        ['&b?[rl]?d?quot?;', '\"'],
         ['&([rl]squo|apos);', "\'"],
-        ['&[mn]?dash;', " - "]
+        ['&[mn]?dash;', "-"]
     ];
 
     $scope.setReplaceOnLoad = function () {
@@ -487,7 +487,7 @@ asanaModule.controller("utilityController", function($scope, AsanaGateway, Asana
     });
 
     $scope.clearPatterns = function () {
-        $scope.patternArray = []
+        $scope.patternArray = [];
     };
 
     $scope.resetToDefault = function () {
